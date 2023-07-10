@@ -103,7 +103,7 @@ button:active {
   align-items: center;
 }
 
-#active-projects header h2 {
+#active-projects header > h2 {
   color: white;
   margin: 0;
 }
