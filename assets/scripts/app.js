@@ -5,8 +5,9 @@ class Projectitem {
         this.id = id;
         this.connectMoreInfoButton();
         this.connectSwithchButton();
+        // console.log(id)
     }
-
+   
     connectMoreInfoButton(){
 
     }
@@ -14,8 +15,12 @@ class Projectitem {
     connectSwithchButton() {
         const projectItemElement = document.getElementById(this.id);
         const switchBtn = projectItemElement.querySelector('button:last-of-type');
-        // switchBtn.addEventListener('click', switchProject)
+        // console.log(switchBtn);
+        switchBtn.addEventListener('click', ()=>{
+            console.log(switchBtn, this.id)
+        })
     }
+
 }
 
 class ProjectList {
@@ -26,7 +31,7 @@ class ProjectList {
         for (const prjItem of prjItems) {
             this.projects.push(new Projectitem(prjItem.id))   
         }
-        console.log(this.projects)
+        // console.log(this.projects)
     }
 
     addProject() {
@@ -35,8 +40,9 @@ class ProjectList {
 
     switchProject(projectId) {
         const projectIndex = this.projects.findIndex(p => p.id === projectId)
-        // this.projects.splice(projectIndex, 1);
-        this.projects = this.projects.filter(p = p.id !== projectId);
+        this.projects.splice(projectIndex, 1);
+        // this.projects = this.projects.filter(p = p.id !== projectId);
+        return projectIndex
     }
 }
 
