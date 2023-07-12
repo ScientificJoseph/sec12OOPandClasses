@@ -1,7 +1,7 @@
 class Tooltip {}
 
 class Projectitem {
-    constructor(id, updateProjectListFunction) { //receivved from ProjectList constructor
+    constructor(id, updateProjectListFunction) { // swithcProject function receivved from ProjectList constructor
         this.id = id;
         this.updateProjectListHandler = updateProjectListFunction
         this.connectMoreInfoButton();
@@ -55,7 +55,7 @@ class App {
     static init() {
         const activeProjectList = new ProjectList('active');
         const finishedProjectList = new ProjectList('finished');
-        activeProjectList.setSwitchHandlerFunction(finishedProjectList.addProject.bind(finishedProjectList)); // calls shf and defines which function should be called when we call switchHadler
+        activeProjectList.setSwitchHandlerFunction(finishedProjectList.addProject.bind(finishedProjectList)); // calls shf and defines which objects addProduct function should be called when we call switchHadler
         finishedProjectList.setSwitchHandlerFunction(activeProjectList.addProject.bind(activeProjectList));
     }
 }
