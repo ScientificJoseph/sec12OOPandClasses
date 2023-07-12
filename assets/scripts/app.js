@@ -28,13 +28,13 @@ class ProjectList {
         this.type = type;
         const prjItems = document.querySelectorAll(`#${type}-projects li`);
         for (const prjItem of prjItems) {
-            this.projects.push(new Projectitem(prjItem.id, this.switchProject.bind(this)))    // calls switchProject - oassed to eventlistener - project we want to switch passed to ProjectItem Constructor for eventlistener
+            this.projects.push(new Projectitem(prjItem.id, this.switchProject.bind(this)))    // calls switchProject - passed to eventlistener - project we want to switch passed to ProjectItem Constructor for eventlistener
         }
         // console.log(this.projects)
     }
 
-    setSwitchHandlerFunction(switchHandlerFunction){ //gets called on instatiation and gets passed 
-        this.switchHandler = switchHandlerFunction // pointer at the function calling add project - used bw switchProject  
+    setSwitchHandlerFunction(switchHandlerFunction){ //gets called on instatiation and gets passed pointer to object functiion calling addProject
+        this.switchHandler = switchHandlerFunction // pointer at the function calling add project - used by switchProject  
     }
 
     addProject() { // need to call in another instance - called from switchProject
