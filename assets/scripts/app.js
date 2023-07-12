@@ -1,7 +1,7 @@
 class Tooltip {}
 
 class Projectitem {
-    constructor(id, updateProjectListFunction) { // swithcProject function receivved from ProjectList constructor
+    constructor(id, updateProjectListFunction) { // swithcProject function receivved from ProjectList constructor on instatiation
         this.id = id;
         this.updateProjectListHandler = updateProjectListFunction
         this.connectMoreInfoButton();
@@ -15,8 +15,8 @@ class Projectitem {
     connectSwithchButton() {
         const projectItemElement = document.getElementById(this.id);
         const switchBtn = projectItemElement.querySelector('button:last-of-type');
-        switchBtn.addEventListener('click', this.updateProjectListHandler)
-        console.log(this.updateProjectListHandler)
+        switchBtn.addEventListener('click', this.updateProjectListHandler)//calls switchProject on click that calls switch handler that calls addProject
+        // console.log(this.updateProjectListHandler)
     }
 
 }
@@ -33,18 +33,24 @@ class ProjectList {
         // console.log(this.projects)
     }
 
-    setSwitchHandlerFunction(switchHandlerFunction){ //gets called on instatiation and gets passed pointer to object functiion calling addProject
-        this.switchHandler = switchHandlerFunction // pointer at the function calling add project - used by switchProject  
+    setSwitchHandlerFunction(switchHandlerFunction){ //gets called on instatiation and passed pointer to object functiion addProject
+        // console.log(switchHandlerFunction)
+        this.switchHandler = switchHandlerFunction // switchHandler gets assigned pointer to the function addProject on instantiation - used by switchProject  
+        // console.log('called',this.switchHandler)
     }
 
-    addProject() { // need to call in another instance - called from switchProject
-        console.log(this)
+    addProject() { // need to call in another instance - called in switchProject from switchHandler
+        // console.log(this)
     }
 
-    switchProject(projectId) {
+    switchProject(projectId) { //passed to eventListener
+        // console.log('received', this.switchHandler)
         // const projectIndex = this.projects.findIndex(p => p.id === projectId)
         // const here = this.projects.splice(projectIndex, 1);
-        this.switchHandler(this.projects.find(p => p.id === projectId)) // pass the project we want to switch - passes the switch handler to be switched = calls addProject
+        this.switchHandler(this.projects.find(p => p.id === projectId)) // = addProject
+         console.log('received', this.switchHandler)
+        // pass the project we want to switch - passes the switch handler to be switched to addProject calls addProject from evenListner fireing switchProject
+        // console.log('received', this.switchHandler)
         this.projects = this.projects.filter(p => p.id !== projectId);
         
     }
@@ -54,9 +60,12 @@ class App {
  
     static init() {
         const activeProjectList = new ProjectList('active');
+        // console.log(activeProjectList)
         const finishedProjectList = new ProjectList('finished');
-        activeProjectList.setSwitchHandlerFunction(finishedProjectList.addProject.bind(finishedProjectList)); // calls shf and defines which objects addProduct function should be called when we call switchHadler
+        activeProjectList.setSwitchHandlerFunction(finishedProjectList.addProject.bind(finishedProjectList)); // on instatiation, binds addProject from finishedProjects. calls shf during instatiation and defines which objects addProduct method should be called when switchProject is invoked on click which calls switchHandler that calls addProject
+        //  console.log(activeProjectList)
         finishedProjectList.setSwitchHandlerFunction(activeProjectList.addProject.bind(activeProjectList));
+       
     }
 }
 
