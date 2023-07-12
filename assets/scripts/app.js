@@ -1,11 +1,11 @@
 class Tooltip {}
 
 class Projectitem {
-    constructor(id) {
+    constructor(id, updateProjectListFunction) { //receivved from ProjectList constructor
         this.id = id;
+        this.updateProjectListHandler = updateProjectListFunction
         this.connectMoreInfoButton();
         this.connectSwithchButton();
-        // console.log(id)
     }
    
     connectMoreInfoButton(){
@@ -15,64 +15,49 @@ class Projectitem {
     connectSwithchButton() {
         const projectItemElement = document.getElementById(this.id);
         const switchBtn = projectItemElement.querySelector('button:last-of-type');
-        // console.log(switchBtn);
-        switchBtn.addEventListener('click', this.addto.bind(this))
-    }
-
-    addto() {
-        App.addProductToCart(this.id)//calls static addProductToCart() in App where addProduct() is called & receives prod instances 
+        switchBtn.addEventListener('click', this.updateProjectListHandler)
+        console.log(this.updateProjectListHandler)
     }
 
 }
-
-
 
 class ProjectList {
     projects = []
    
     constructor(type) {
+        this.type = type;
         const prjItems = document.querySelectorAll(`#${type}-projects li`);
         for (const prjItem of prjItems) {
-            this.projects.push(new Projectitem(prjItem.id))   
+            this.projects.push(new Projectitem(prjItem.id, this.switchProject.bind(this)))    // calls switchProject - oassed to eventlistener - project we want to switch passed to ProjectItem Constructor for eventlistener
         }
         // console.log(this.projects)
     }
 
+    setSwitchHandlerFunction(switchHandlerFunction){ //gets called on instatiation and gets passed 
+        this.switchHandler = switchHandlerFunction // pointer at the function calling add project - used bw switchProject  
+    }
 
-
-    addProject() {
-
+    addProject() { // need to call in another instance - called from switchProject
+        console.log(this)
     }
 
     switchProject(projectId) {
-        const projectIndex = this.projects.findIndex(p => p.id === projectId)
-        const here = this.projects.splice(projectIndex, 1);
-        // this.projects = this.projects.filter(p = p.id !== projectId);
-        console.log(here)
-        return projectIndex
+        // const projectIndex = this.projects.findIndex(p => p.id === projectId)
+        // const here = this.projects.splice(projectIndex, 1);
+        this.switchHandler(this.projects.find(p => p.id === projectId)) // pass the project we want to switch - passes the switch handler to be switched = calls addProject
+        this.projects = this.projects.filter(p => p.id !== projectId);
+        
     }
 }
 
 class App {
-    static meth;
  
     static init() {
         const activeProjectList = new ProjectList('active');
-        this.meth = activeProjectList
-        console.log(activeProjectList)
-
         const finishedProjectList = new ProjectList('finished');
-        // this.meth = finishedProjectList
-        console.log(finishedProjectList)
+        activeProjectList.setSwitchHandlerFunction(finishedProjectList.addProject.bind(finishedProjectList)); // calls shf and defines which function should be called when we call switchHadler
+        finishedProjectList.setSwitchHandlerFunction(activeProjectList.addProject.bind(activeProjectList));
     }
-
-    static addProductToCart(eyed) { //static method receives product from call of event listener in ProducItem addToCart()
-        // console.log(eyed)
-        this.meth.switchProject(eyed)//calls addProduct method from this.cart and passes product to addProduct method in ShoppingCart
-       
-    }
-
-
 }
 
 App.init();
