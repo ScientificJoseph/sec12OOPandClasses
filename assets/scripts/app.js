@@ -43,7 +43,7 @@ class Projectitem {
 class ProjectList {
     projects = []
    
-    constructor(type) {
+    constructor(type) { // type received on instantiation
         this.type = type;
         const prjItems = document.querySelectorAll(`#${type}-projects li`);
         for (const prjItem of prjItems) {
@@ -74,7 +74,7 @@ class ProjectList {
 class App {
  
     static init() {
-        const activeProjectList = new ProjectList('active');
+        const activeProjectList = new ProjectList('active'); // type passed to constructor
         const finishedProjectList = new ProjectList('finished');
         activeProjectList.setSwitchHandlerFunction(finishedProjectList.addProject.bind(finishedProjectList)); // calls SwitchHandlerFunction on instatiation, defines which objects addProduct method should be called by connecting/binding addProject from finishedProject. When switchProject is invoked on click switchHandler gets called invoking addProject method.
         finishedProjectList.setSwitchHandlerFunction(activeProjectList.addProject.bind(activeProjectList));
