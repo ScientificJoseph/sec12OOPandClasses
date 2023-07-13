@@ -1,7 +1,7 @@
 class DOMHelper {
     static clearEventListeners(element) { //gets rid of old ebentListener for an element. called from connectSwithchButton
         const clonedElement = element.cloneNode(true) // makes deep clone of button
-        element.replaceWith(clonedElement) // creates new button with a cleared clone of old one clearing event listeners
+        element.replaceWith(clonedElement) // creates new button with a clone of old one clearing eventListener
         return clonedElement; // returns the new button
     }
 
