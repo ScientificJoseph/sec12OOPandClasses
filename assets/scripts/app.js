@@ -15,7 +15,7 @@ class DOMHelper {
 class Tooltip {}
 
 class Projectitem {
-    constructor(id, updateProjectListFunction, type) { // swithcProject function receivved from ProjectList constructor on instatiation
+    constructor(id, updateProjectListFunction, type) { // parameters receivved from ProjectList constructor on ProjectItem instatiation
         this.id = id;
         this.updateProjectListHandler = updateProjectListFunction;
         this.connectMoreInfoButton();
