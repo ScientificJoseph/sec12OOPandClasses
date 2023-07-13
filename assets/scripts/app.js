@@ -12,18 +12,58 @@ class DOMHelper {
     }
 }
 
-class Tooltip {}
+class Tooltip {
+    constructor(closeNotifierFunction) {
+        this.closeNotifier = closeNotifierFunction;
+    }
+
+    closeTooltip = () => {// when using arrow functions this refers to the class automatically
+        this.detach();
+        this.closeNotifier()
+
+    }
+
+    detach(){ 
+        this.element.remove()
+        // this.element.parentElement.removeChild(this.element)
+    }
+
+    attach() {
+        const tooltipElement = document.createElement('div')
+        tooltipElement.className = 'card';
+        tooltipElement.textContent = 'DUMDUM' 
+        tooltipElement.addEventListener('click', this.closeTooltip)
+        this.element = tooltipElement
+        document.body.append(tooltipElement)
+
+    }
+}
 
 class Projectitem {
+    hasactiveToolTip = false; // set up to see if item already has an active toolTip
+
     constructor(id, updateProjectListFunction, type) { // parameters receivved from ProjectList constructor on ProjectItem instatiation
         this.id = id;
         this.updateProjectListHandler = updateProjectListFunction;
         this.connectMoreInfoButton();
         this.connectSwithchButton(type);
     }
+
+    showMoreInfoHandler() {
+        if (this.hasactiveToolTip) {
+            return;
+        }
+        const tooltip = new Tooltip(() => {
+            this.hasactiveToolTip = false;
+        })
+        tooltip.attach(); 
+        this.hasactiveToolTip = true;
+    }
    
     connectMoreInfoButton(){
-
+        const projectItemElement = document.getElementById(this.id);
+        const moreInfoBtn = projectItemElement.querySelector('button:first-of-type')
+        moreInfoBtn.addEventListener('click', this.showMoreInfoHandler);
     }
 
     connectSwithchButton(type) { //type received from call to functiom
