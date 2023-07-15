@@ -12,9 +12,36 @@ class DOMHelper { // called in connectSwithchButton() in ProjectItem
     }
 }
 
-class Tooltip {
+class Component { // base class for attach and detach
+    constructor(hostElementId, insertBefore = false) { //parameters received from Tooltip super constructor if any
+        if(hostElementId) { // check to see if it is set
+            this.hostElement = document.getElementById(hostElementId); // if id is passed host elemnet id is used by attach method to determine where tooltip dialog will appear
+        } else {
+            this.hostElement = document.body; // used if null is received from super constuctor call when ToolTip is extended. attach method terinary operator will be false and this.element will appear before the end of the body of the document  
+        }
+        this.insertBefore = insertBefore //default is false. true if true is passed to constructor
+    }
+    detach(){ 
+        if (this.element) {
+            this.element.remove() // refers to the element stored in attach method
+            // this.element.parentElement.removeChild(this.element) //older browser support
+        } 
+    }
+
+    attach() { // called from showMoreInfoHandler method in ProjectItem .determines where toolTip dialog will appear based on parameter status.
+        // document.body.append(this.element)
+        this.hostElement.insertAdjacentElement(this.insertBefore ? 'afterbegin' : 'beforeend', this.element) //if arguments recieved to constructor call when toolTip extends component this wdill detemin where tooltip dialog will appear. if none are received the toolTip dialog will appear before the end of the document body
+        console.log(this.insertBefore)
+    }
+
+}
+
+class Tooltip extends Component{
     constructor(closeNotifierFunction) { //function parameter received on instatiation in ProjectItem showMoreInfoHandler(). Ensures that a toolTtip dialog box status is not active.
+        super(); // can be used to pass parameters to Component constructor that will determin where toolTip dialog will appear
+        // super('active-projects', true); 
         this.closeNotifier = closeNotifierFunction;
+        this.create(); // calls create method on instantiation to create toolTip dialog element
     }
 
     closeTooltip = () => {// when using arrow functions this refers to the class automatically on function being called. no need to bind call to this
@@ -22,20 +49,14 @@ class Tooltip {
         this.closeNotifier() //calls method passed to constructor on instatiation that sets hasActiveToolTip value to false when tooltip is closed allowing another toolTip dialog to be displayed if neccessary
     }
 
-    detach(){ 
-        this.element.remove() // refers to the element stored in attach method
-        // this.element.parentElement.removeChild(this.element) //older browser support
-    }
-
-    attach() { // called from showMoreInfoHandler method in ProjectItem
+    create() {
         const tooltipElement = document.createElement('div') // div for tooltip element
         tooltipElement.className = 'card';
         tooltipElement.textContent = 'DUMDUM DUMMY' 
         tooltipElement.addEventListener('click', this.closeTooltip) // adds eventListener to div and calls closeToolTip on click to remove the toolTip and set hascActive to false. binding is not needed to to close tool tip being an arrow function 
-        this.element = tooltipElement // makes the div accesable in the detach method
-        document.body.append(tooltipElement)
-
+        this.element = tooltipElement // The methods detach and attach extended from Component use this to remove or determine where the tooltip dialog will apear
     }
+
 }
 
 class Projectitem {
@@ -48,14 +69,14 @@ class Projectitem {
         this.connectSwithchButton(type);
     }
 
-    showMoreInfoHandler() {
+    showMoreInfoHandler() { // called whem nore info Btn is clicked
         if (this.hasActiveToolTip) { //stops addition toolTip project information dialog from being added if it is already present
             return;
         }
         const tooltip = new Tooltip(() => { //creates toolTip object. On instantiation passes anonomous function to the constructor that when called sets the value of hasActiveTooltip to false when toolTip is closed
             this.hasActiveToolTip = false;
         })
-        tooltip.attach();  //calls attatch method in Tooltip object to create and display toolTip element
+        tooltip.attach();  //calls attatch method in Tooltip extended Class Component object that determsines where tooltip dialog will appear 
         this.hasActiveToolTip = true; // sets tooltip element status to active to ensure that that clicking More Info Btn won't add another toolTip.
     }
    
