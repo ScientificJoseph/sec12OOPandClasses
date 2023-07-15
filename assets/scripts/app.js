@@ -1,4 +1,4 @@
-class DOMHelper { // called in connectSwithchButton() in ProjectItem
+class DOMHelper { // called from connectSwithchButton() in ProjectItem
     static clearEventListeners(element) { //gets rid of old ebentListener for an element. called from connectSwithchButton
         const clonedElement = element.cloneNode(true) // makes deep clone of button. Default value is false.
         element.replaceWith(clonedElement) // called in connectSwithchButton. Creates new button with a clone of old one clearing eventListener.
@@ -89,7 +89,7 @@ class Projectitem {
     connectSwithchButton(type) { //type received from call to functiom
         const projectItemElement = document.getElementById(this.id);
         let switchBtn = projectItemElement.querySelector('button:last-of-type');
-        switchBtn = DOMHelper.clearEventListeners(switchBtn) // passes button to function to clear any pre-existing eventListeners
+        switchBtn = DOMHelper.clearEventListeners(switchBtn) // passes button to DOMHelper static method to clear any pre-existing eventListeners
         switchBtn.textContent = type ==='active' ? 'Finish' : 'Activate'; //changes the tect when active/finished status changes
         switchBtn.addEventListener('click', this.updateProjectListHandler.bind(null, this.id))//received from update. calls switchProject on click then switchHandler/addProject is invoked.
     }
