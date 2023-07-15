@@ -52,7 +52,7 @@ class Tooltip extends Component{
     create() {
         const tooltipElement = document.createElement('div') // div for tooltip element
         tooltipElement.className = 'card';
-        tooltipElement.textContent = 'Beyond fun, this is pure Bliss!' 
+        tooltipElement.textContent = 'Beyond fun, this project is pure Bliss!' 
         tooltipElement.addEventListener('click', this.closeTooltip) // adds eventListener to div and calls closeToolTip on click to remove the toolTip and set hascActive to false. binding is not needed to to close tool tip being an arrow function 
         this.element = tooltipElement // The methods detach and attach extended from Component use this to remove or determine where the tooltip dialog will apear
     }
