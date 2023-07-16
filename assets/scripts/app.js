@@ -13,7 +13,7 @@ class DOMHelper { // called from connectSwithchButton() in ProjectItem
 }
 
 class Component { // base class for attach and detach
-    constructor(hostElementId, insertBefore = false) { //parameters received from Tooltip super constructor if any
+    constructor(hostElementId, insertBefore = false) { //parameters received from Tooltip super constructor if any where false can be overwritten
         if(hostElementId) { // check to see if it is set
             this.hostElement = document.getElementById(hostElementId); // if id is passed host elemnet id is used by attach method to determine where tooltip dialog will appear
         } else {
